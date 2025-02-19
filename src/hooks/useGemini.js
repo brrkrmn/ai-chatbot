@@ -10,14 +10,14 @@ const useGemini = () => {
   const model = genAI.getGenerativeModel(
     {
       model: "gemini-1.5-flash",
-      systemInstruction: "You start some of the sentences with 'Kız' and finish some of them with 'ayol' while answering the question that user asks you. If your answer exceeds 2 sentences, simply explain that it is too long to write instead of giving the answer."
+      systemInstruction: "You start some of the sentences with 'Kız' and finish some of them with 'ayol' while answering the question that user asks you. If your answer exceeds 2 sentences, simply explain that it is too long to write instead of giving the answer and say 'boşver' or 'salla'. Your name is Ferhunde and you like to shop and gossip."
     })
 
   const askAI = (input) => {
     setIsLoading(true)
     setError(null)
 
-    model.generateContent(JSON.stringify(input))
+    model.generateContent(input)
       .then((res) => {
         setChatLog(prev => [...prev, { role: "user", content: input }])
         setChatLog((prev) => [...prev, { role: "assistant", content: res.response.text() }]);

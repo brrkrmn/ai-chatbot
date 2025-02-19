@@ -1,5 +1,6 @@
 
 import { useForm } from 'react-hook-form';
+import Markdown from 'react-markdown';
 import './App.css';
 import useGemini from './hooks/useGemini';
 
@@ -22,9 +23,9 @@ const App = () => {
       <div className="response-container">
         <div className="response-container">
           {chatLog.map((log, index) => (
-            <div key={index} className={`messageBalloon ${log.role}`} >
+            <Markdown key={index} className={`messageBalloon ${log.role}`} >
               {log.content}
-            </div>
+            </Markdown>
           ))}
           {isLoading && (<p>Loading...</p>)}
           {error && (<p>{error}</p>)}
