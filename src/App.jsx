@@ -1,28 +1,30 @@
-import { useState } from 'react';
 
+import { useForm } from 'react-hook-form';
 import './App.css';
 
-function App() {
-  const [userInput, setUserInput] = useState('');
+const App = () => {
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { isValid }
+  } = useForm({ mode: "onChange" });
 
-  function handleChat(event) {
-    event.preventDefault();
-  }
 
-  function handleChange(event) {
-    const { value } = event.target;
-    setUserInput(value);
+  const onSubmit = (input) => {
+    console.log(input);
+    reset();
   }
 
   return (
     <div className="content">
       <div className="response-container">
-        <div class="response-container">
-          <div class="messageBalloon user">
+        <div className="response-container">
+          <div className="messageBalloon user">
             Tell me about san-francisco in 3 sentences. use bullet points and
             highlight important words.
           </div>
-          <div class="messageBalloon assistant">
+          <div className="messageBalloon assistant">
             <ul>
               <li>
                 <strong>Iconic Landmark City:</strong> San Francisco is renowned
@@ -48,9 +50,9 @@ function App() {
         </div>
       </div>
       <div className="input-container">
-        <form onSubmit={handleChat}>
-          <input name="user-input" onChange={handleChange} value={userInput} />
-          <button>Ask</button>
+        <form onSubmit={handleSubmit(onSubmit)}>
+          <input name="user-input" {...register("input", { required: true})} />
+          <button type="submit" disabled={!isValid}>Ask</button>
         </form>
       </div>
     </div>
