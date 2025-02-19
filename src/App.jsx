@@ -1,6 +1,7 @@
 
 import { useForm } from 'react-hook-form';
 import './App.css';
+import useGemini from './hooks/useGemini';
 
 const App = () => {
   const {
@@ -9,10 +10,10 @@ const App = () => {
     reset,
     formState: { isValid }
   } = useForm({ mode: "onChange" });
+  const { chatLog, error, isLoading, askAI } = useGemini();
 
-
-  const onSubmit = (input) => {
-    console.log(input);
+  const onSubmit = (data) => {
+    askAI(data.input)
     reset();
   }
 
@@ -20,33 +21,13 @@ const App = () => {
     <div className="content">
       <div className="response-container">
         <div className="response-container">
-          <div className="messageBalloon user">
-            Tell me about san-francisco in 3 sentences. use bullet points and
-            highlight important words.
-          </div>
-          <div className="messageBalloon assistant">
-            <ul>
-              <li>
-                <strong>Iconic Landmark City:</strong> San Francisco is renowned
-                for <strong>Golden Gate Bridge</strong>,{' '}
-                <strong>Alcatraz Island</strong>, and steep{' '}
-                <strong>cable cars</strong>.
-              </li>
-              <li>
-                <strong>Vibrant Culture:</strong> A <strong>melting pot</strong>{' '}
-                of diverse cultures, San Francisco boasts{' '}
-                <strong>world-class museums</strong>,{' '}
-                <strong>culinary delights</strong>, and a thriving{' '}
-                <strong>LGBTQ+ community</strong>.
-              </li>
-              <li>
-                <strong>Tech Hub:</strong> Home to{' '}
-                <strong>Silicon Valley</strong>, San Francisco is a global
-                center for <strong>innovation</strong> and technological
-                advancements.
-              </li>
-            </ul>
-          </div>
+          {chatLog.map((log, index) => (
+            <div key={index} className={`messageBalloon ${log.role}`} >
+              {log.content}
+            </div>
+          ))}
+          {isLoading && (<p>Loading...</p>)}
+          {error && (<p>{error}</p>)}
         </div>
       </div>
       <div className="input-container">
